@@ -1,0 +1,6 @@
+@MindCareAi_HostAddress = http://localhost:5116
+
+GET {{MindCareAi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
