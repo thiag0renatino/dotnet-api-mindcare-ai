@@ -6,9 +6,8 @@ public class MindCareContextInitializer(MindCareContext context, ILogger<MindCar
 {
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("Validando conexão com Oracle database...");
-        await context.Database.OpenConnectionAsync(cancellationToken);
-        await context.Database.CloseConnectionAsync();
-        logger.LogInformation("Oracle database conectado com sucesso.");
+        logger.LogInformation("Migrando e validando Oracle database...");
+        await context.Database.MigrateAsync(cancellationToken);
+        logger.LogInformation("Oracle database migrado/validado com sucesso.");
     }
 }

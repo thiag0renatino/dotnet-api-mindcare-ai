@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\RiderProjects\\MindCareAi\\MindCareAi\\MindCareAi.csproj": {}
+    "D:\\RiderProjects\\MindCareAi\\MindCareAI\\MindCareAi.csproj": {}
   },
   "projects": {
-    "D:\\RiderProjects\\MindCareAi\\MindCareAi\\MindCareAi.csproj": {
+    "D:\\RiderProjects\\MindCareAi\\MindCareAI\\MindCareAi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RiderProjects\\MindCareAi\\MindCareAi\\MindCareAi.csproj",
+        "projectUniqueName": "D:\\RiderProjects\\MindCareAi\\MindCareAI\\MindCareAi.csproj",
         "projectName": "MindCareAi",
-        "projectPath": "D:\\RiderProjects\\MindCareAi\\MindCareAi\\MindCareAi.csproj",
+        "projectPath": "D:\\RiderProjects\\MindCareAi\\MindCareAI\\MindCareAi.csproj",
         "packagesPath": "C:\\Users\\Thiago\\.nuget\\packages\\",
-        "outputPath": "D:\\RiderProjects\\MindCareAi\\MindCareAi\\obj\\",
+        "outputPath": "D:\\RiderProjects\\MindCareAi\\MindCareAI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Thiago\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -57,6 +57,12 @@
               "version": "[9.0.9, )"
             },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.*, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.*, )"
             },
