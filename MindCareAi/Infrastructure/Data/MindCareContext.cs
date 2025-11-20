@@ -5,7 +5,8 @@ using MindCareAi.Domain.Enums;
 
 namespace MindCareAi.Infrastructure.Data;
 
-public class MindCareContext(DbContextOptions<MindCareContext> options) : DbContext(options)
+public class 
+    MindCareContext(DbContextOptions<MindCareContext> options) : DbContext(options)
 {
     public DbSet<Empresa> Empresas => Set<Empresa>();
     public DbSet<UsuarioSistema> Usuarios => Set<UsuarioSistema>();
@@ -16,6 +17,27 @@ public class MindCareContext(DbContextOptions<MindCareContext> options) : DbCont
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("RM556934");
+
+        modelBuilder.HasSequence<int>("SEQ_EMPRESA_GS", "RM556934")
+            .StartsAt(11)
+            .IncrementsBy(1);
+        modelBuilder.HasSequence<int>("SEQ_USUARIO_GS", "RM556934")
+            .StartsAt(11)
+            .IncrementsBy(1);
+        modelBuilder.HasSequence<int>("SEQ_TRIAGEM_GS", "RM556934")
+            .StartsAt(11)
+            .IncrementsBy(1);
+        modelBuilder.HasSequence<int>("SEQ_PROFISSIONAL_GS", "RM556934")
+            .StartsAt(11)
+            .IncrementsBy(1);
+        modelBuilder.HasSequence<int>("SEQ_ENCAMINHAMENTO_GS", "RM556934")
+            .StartsAt(11)
+            .IncrementsBy(1);
+        modelBuilder.HasSequence<int>("SEQ_ACOMPANHAMENTO_GS", "RM556934")
+            .StartsAt(11)
+            .IncrementsBy(1);
+
         ConfigureEmpresa(modelBuilder.Entity<Empresa>());
         ConfigureUsuario(modelBuilder.Entity<UsuarioSistema>());
         ConfigureTriagem(modelBuilder.Entity<Triagem>());
@@ -29,8 +51,9 @@ public class MindCareContext(DbContextOptions<MindCareContext> options) : DbCont
         entity.ToTable("EMPRESA");
         entity.HasKey(e => e.Id).HasName("EMPRESA_PK");
         entity.Property(e => e.Id)
+            .HasColumnName("ID")
             .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("SEQ_EMPRESA_GS.NEXTVAL");
+            .HasDefaultValueSql("\"RM556934\".\"SEQ_EMPRESA_GS\".NEXTVAL");
         entity.Property(e => e.Cnpj)
             .IsRequired()
             .HasMaxLength(14)
@@ -52,8 +75,9 @@ public class MindCareContext(DbContextOptions<MindCareContext> options) : DbCont
         entity.ToTable("USUARIO_SISTEMA");
         entity.HasKey(e => e.Id).HasName("USUARIO_PK");
         entity.Property(e => e.Id)
+            .HasColumnName("ID")
             .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("SEQ_USUARIO_GS.NEXTVAL");
+            .HasDefaultValueSql("\"RM556934\".\"SEQ_USUARIO_GS\".NEXTVAL");
         entity.Property(e => e.Nome)
             .HasMaxLength(100)
             .IsRequired()
@@ -87,8 +111,9 @@ public class MindCareContext(DbContextOptions<MindCareContext> options) : DbCont
         entity.ToTable("TRIAGEM");
         entity.HasKey(t => t.Id).HasName("TRIAGEM_PK");
         entity.Property(t => t.Id)
+            .HasColumnName("ID")
             .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("SEQ_TRIAGEM_GS.NEXTVAL");
+            .HasDefaultValueSql("\"RM556934\".\"SEQ_TRIAGEM_GS\".NEXTVAL");
         entity.Property(t => t.DataHora)
             .HasColumnName("DATA_HORA")
             .IsRequired();
@@ -114,8 +139,9 @@ public class MindCareContext(DbContextOptions<MindCareContext> options) : DbCont
         entity.ToTable("PROFISSIONAL");
         entity.HasKey(p => p.Id).HasName("PROFISSIONAL_PK");
         entity.Property(p => p.Id)
+            .HasColumnName("ID")
             .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("SEQ_PROFISSIONAL_GS.NEXTVAL");
+            .HasDefaultValueSql("\"RM556934\".\"SEQ_PROFISSIONAL_GS\".NEXTVAL");
         entity.Property(p => p.Nome)
             .HasColumnName("NOME")
             .HasMaxLength(100)
@@ -137,8 +163,9 @@ public class MindCareContext(DbContextOptions<MindCareContext> options) : DbCont
         entity.ToTable("ENCAMINHAMENTO");
         entity.HasKey(e => e.Id).HasName("ENCAMINHAMENTO_PK");
         entity.Property(e => e.Id)
+            .HasColumnName("ID")
             .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("SEQ_ENCAMINHAMENTO_GS.NEXTVAL");
+            .HasDefaultValueSql("\"RM556934\".\"SEQ_ENCAMINHAMENTO_GS\".NEXTVAL");
         entity.Property(e => e.Tipo)
             .HasColumnName("TIPO")
             .HasConversion(
@@ -187,8 +214,9 @@ public class MindCareContext(DbContextOptions<MindCareContext> options) : DbCont
         entity.ToTable("ACOMPANHAMENTO");
         entity.HasKey(a => a.Id).HasName("ACOMPANHAMENTO_PK");
         entity.Property(a => a.Id)
+            .HasColumnName("ID")
             .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("SEQ_ACOMPANHAMENTO_GS.NEXTVAL");
+            .HasDefaultValueSql("\"RM556934\".\"SEQ_ACOMPANHAMENTO_GS\".NEXTVAL");
         entity.Property(a => a.DataEvento)
             .HasColumnName("DATA_EVENTO")
             .IsRequired();

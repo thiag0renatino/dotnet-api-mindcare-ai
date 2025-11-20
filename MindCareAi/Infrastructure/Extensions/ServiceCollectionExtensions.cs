@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MindCareAi.Infrastructure.Data;
+using MindCareAi.Services;
+using MindCareAi.Services.Interfaces;
 
 namespace MindCareAi.Infrastructure.Extensions;
 
@@ -20,6 +22,12 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<MindCareContextInitializer>();
+        services.AddScoped<IAcompanhamentoService, AcompanhamentoService>();
+        services.AddScoped<IEncaminhamentoService, EncaminhamentoService>();
+        services.AddScoped<ITriagemService, TriagemService>();
+        services.AddScoped<IUsuarioService, UsuarioService>();
+        services.AddScoped<IEmpresaService, EmpresaService>();
+        services.AddScoped<IProfissionalService, ProfissionalService>();
 
         return services;
     }
