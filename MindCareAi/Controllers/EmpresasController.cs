@@ -19,11 +19,15 @@ public class EmpresasController(IEmpresaService service) : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<Resource<EmpresaResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<EmpresaResponseDto>>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetPagedAsync(page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },

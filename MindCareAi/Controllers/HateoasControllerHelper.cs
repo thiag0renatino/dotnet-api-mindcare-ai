@@ -6,6 +6,24 @@ namespace MindCareAi.Controllers;
 
 internal static class HateoasControllerHelper
 {
+    public static bool TryValidatePaging(ControllerBase controller, int page, int size, out ActionResult? badRequest)
+    {
+        if (page < 1)
+        {
+            badRequest = controller.BadRequest("Query parameter 'page' must be greater than or equal to 1.");
+            return false;
+        }
+
+        if (size < 1)
+        {
+            badRequest = controller.BadRequest("Query parameter 'size' must be greater than or equal to 1.");
+            return false;
+        }
+
+        badRequest = null;
+        return true;
+    }
+
     public static int TotalPages<T>(MindCareAi.Services.Pagination.PagedResult<T> paged)
         => paged.PageSize == 0 ? 0 : (int)Math.Ceiling((double)paged.TotalItems / paged.PageSize);
 

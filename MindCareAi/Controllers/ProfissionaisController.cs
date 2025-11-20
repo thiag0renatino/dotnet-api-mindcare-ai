@@ -19,11 +19,15 @@ public class ProfissionaisController(IProfissionalService service) : ControllerB
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<Resource<ProfissionalResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<ProfissionalResponseDto>>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetPagedAsync(page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },
@@ -60,12 +64,16 @@ public class ProfissionaisController(IProfissionalService service) : ControllerB
 
     [HttpGet("especialidades/{especialidade}")]
     [ProducesResponseType(typeof(PagedResult<Resource<ProfissionalResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<ProfissionalResponseDto>>>> GetByEspecialidade(
         [FromRoute] string especialidade,
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetByEspecialidadeAsync(especialidade, page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },

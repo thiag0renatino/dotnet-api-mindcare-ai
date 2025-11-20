@@ -19,11 +19,15 @@ public class UsuariosController(IUsuarioService service) : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<Resource<UsuarioResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<UsuarioResponseDto>>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetPagedAsync(page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },
@@ -77,12 +81,16 @@ public class UsuariosController(IUsuarioService service) : ControllerBase
 
     [HttpGet("empresas/{empresaId:int}")]
     [ProducesResponseType(typeof(PagedResult<Resource<UsuarioResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<UsuarioResponseDto>>>> GetByEmpresa(
         [FromRoute] int empresaId,
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetByEmpresaAsync(empresaId, page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },
@@ -112,12 +120,16 @@ public class UsuariosController(IUsuarioService service) : ControllerBase
 
     [HttpGet("tipos/{tipo}")]
     [ProducesResponseType(typeof(PagedResult<Resource<UsuarioResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<UsuarioResponseDto>>>> GetByTipo(
         [FromRoute] string tipo,
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetByTipoAsync(tipo, page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },

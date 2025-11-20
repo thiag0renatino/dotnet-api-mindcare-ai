@@ -19,11 +19,15 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<Resource<EncaminhamentoResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<EncaminhamentoResponseDto>>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetPagedAsync(page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },
@@ -60,12 +64,16 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
 
     [HttpGet("triagens/{triagemId:int}")]
     [ProducesResponseType(typeof(PagedResult<Resource<EncaminhamentoResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<EncaminhamentoResponseDto>>>> GetByTriagem(
         [FromRoute] int triagemId,
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetByTriagemAsync(triagemId, page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },
@@ -95,6 +103,7 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
 
     [HttpGet("empresas/{empresaId:int}/recomendados")]
     [ProducesResponseType(typeof(PagedResult<Resource<EncaminhamentoRecomendadoDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<EncaminhamentoRecomendadoDto>>>> GetRecomendados(
         [FromRoute] int empresaId,
         [FromQuery] string? especialidade = null,
@@ -102,6 +111,9 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetRecomendadosAsync(empresaId, especialidade, page, size, cancellationToken);
         var items = paged.Items.Select(dto =>
         {
@@ -120,7 +132,12 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
             new { empresaId, especialidade },
             paged.Page,
             paged.PageSize,
-            HateoasControllerHelper.TotalPages(paged));
+            HateoasControllerHelper.TotalPages(paged),
+            new[]
+            {
+                Url.CreateLink("create", nameof(Create), method: "POST"),
+                Url.CreateLink("list-all", nameof(GetAll), new { page = 1, size = 10 })
+            });
 
         var result = HateoasControllerHelper.BuildPagedResult(Url, paged, items, links);
         return Ok(result);

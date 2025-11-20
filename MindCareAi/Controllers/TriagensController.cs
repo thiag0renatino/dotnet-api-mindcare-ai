@@ -19,11 +19,15 @@ public class TriagensController(ITriagemService service) : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<Resource<TriagemResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<TriagemResponseDto>>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetPagedAsync(page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },
@@ -60,12 +64,16 @@ public class TriagensController(ITriagemService service) : ControllerBase
 
     [HttpGet("usuarios/{usuarioId:int}")]
     [ProducesResponseType(typeof(PagedResult<Resource<TriagemResponseDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PagedResult<Resource<TriagemResponseDto>>>> GetByUsuario(
         [FromRoute] int usuarioId,
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
         CancellationToken cancellationToken = default)
     {
+        if (!HateoasControllerHelper.TryValidatePaging(this, page, size, out var badRequestResult))
+            return badRequestResult;
+
         var paged = await _service.GetByUsuarioAsync(usuarioId, page, size, cancellationToken);
         var items = paged.Items
             .Select(dto => Url.ToResource(dto, new { id = dto.Id },
