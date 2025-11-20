@@ -9,6 +9,11 @@
 # Configurações locais do Rider/IDE
 *.DotSettings.user
 
+bin/
+obj/
+*.user
+*.suo
+
 
 # App config local
 appsettings.Development.json

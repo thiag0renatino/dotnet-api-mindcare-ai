@@ -95,7 +95,10 @@ app.MapHealthChecks("/health", new HealthCheckOptions
     }
 });
 
-await EnsureDatabaseAsync(app.Services);
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    await EnsureDatabaseAsync(app.Services);
+}
 
 app.Run();
 
@@ -104,4 +107,8 @@ async Task EnsureDatabaseAsync(IServiceProvider services)
     await using var scope = services.CreateAsyncScope();
     var initializer = scope.ServiceProvider.GetRequiredService<MindCareContextInitializer>();
     await initializer.InitializeAsync();
+}
+
+public partial class Program
+{
 }
