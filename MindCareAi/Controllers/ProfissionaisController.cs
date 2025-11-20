@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MindCareAi.Domain.DTOs.Requests;
 using MindCareAi.Domain.DTOs.Responses;
 using MindCareAi.Services.Interfaces;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MindCareAi.Controllers;
 
@@ -20,6 +21,7 @@ public class ProfissionaisController(IProfissionalService service) : ControllerB
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<Resource<ProfissionalResponseDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Lista profissionais", Description = "Retorna profissionais paginados com links HATEOAS.")]
     public async Task<ActionResult<PagedResult<Resource<ProfissionalResponseDto>>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
@@ -48,6 +50,7 @@ public class ProfissionaisController(IProfissionalService service) : ControllerB
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(Resource<ProfissionalResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Busca profissional por ID", Description = "Recupera um profissional específico.")]
     public async Task<ActionResult<Resource<ProfissionalResponseDto>>> GetById(
         [FromRoute] int id,
         CancellationToken cancellationToken = default)
@@ -65,6 +68,7 @@ public class ProfissionaisController(IProfissionalService service) : ControllerB
     [HttpGet("especialidades/{especialidade}")]
     [ProducesResponseType(typeof(PagedResult<Resource<ProfissionalResponseDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Lista por especialidade", Description = "Retorna profissionais filtrados por especialidade, paginados.")]
     public async Task<ActionResult<PagedResult<Resource<ProfissionalResponseDto>>>> GetByEspecialidade(
         [FromRoute] string especialidade,
         [FromQuery] int page = 1,
@@ -104,6 +108,7 @@ public class ProfissionaisController(IProfissionalService service) : ControllerB
     [HttpPost]
     [Consumes("application/json")]
     [ProducesResponseType(typeof(Resource<ProfissionalResponseDto>), StatusCodes.Status201Created)]
+    [SwaggerOperation(Summary = "Cria profissional", Description = "Inclui um novo profissional.")]
     public async Task<ActionResult<Resource<ProfissionalResponseDto>>> Create(
         [FromBody] ProfissionalRequestDto dto,
         CancellationToken cancellationToken = default)
@@ -120,6 +125,7 @@ public class ProfissionaisController(IProfissionalService service) : ControllerB
     [Consumes("application/json")]
     [ProducesResponseType(typeof(Resource<ProfissionalResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Atualiza profissional", Description = "Atualiza um profissional existente pelo ID.")]
     public async Task<ActionResult<Resource<ProfissionalResponseDto>>> Update(
         [FromRoute] int id,
         [FromBody] ProfissionalRequestDto dto,
@@ -138,6 +144,7 @@ public class ProfissionaisController(IProfissionalService service) : ControllerB
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Remove profissional", Description = "Exclui um profissional pelo ID.")]
     public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken = default)
         => (await _service.DeleteAsync(id, cancellationToken)) ? NoContent() : NotFound();
 }

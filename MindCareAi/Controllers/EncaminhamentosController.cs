@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MindCareAi.Domain.DTOs.Requests;
 using MindCareAi.Domain.DTOs.Responses;
 using MindCareAi.Services.Interfaces;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MindCareAi.Controllers;
 
@@ -20,6 +21,7 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<Resource<EncaminhamentoResponseDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Lista encaminhamentos", Description = "Retorna encaminhamentos paginados com HATEOAS.")]
     public async Task<ActionResult<PagedResult<Resource<EncaminhamentoResponseDto>>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
@@ -48,6 +50,7 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(Resource<EncaminhamentoResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Busca encaminhamento por ID", Description = "Recupera um encaminhamento específico.")]
     public async Task<ActionResult<Resource<EncaminhamentoResponseDto>>> GetById(
         [FromRoute] int id,
         CancellationToken cancellationToken = default)
@@ -65,6 +68,7 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
     [HttpGet("triagens/{triagemId:int}")]
     [ProducesResponseType(typeof(PagedResult<Resource<EncaminhamentoResponseDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Lista por triagem", Description = "Retorna encaminhamentos de uma triagem específica, paginados.")]
     public async Task<ActionResult<PagedResult<Resource<EncaminhamentoResponseDto>>>> GetByTriagem(
         [FromRoute] int triagemId,
         [FromQuery] int page = 1,
@@ -104,6 +108,7 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
     [HttpGet("empresas/{empresaId:int}/recomendados")]
     [ProducesResponseType(typeof(PagedResult<Resource<EncaminhamentoRecomendadoDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Lista recomendados", Description = "Retorna profissionais recomendados para encaminhamento de uma empresa, com paginação.")]
     public async Task<ActionResult<PagedResult<Resource<EncaminhamentoRecomendadoDto>>>> GetRecomendados(
         [FromRoute] int empresaId,
         [FromQuery] string? especialidade = null,
@@ -146,6 +151,7 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
     [HttpPost]
     [Consumes("application/json")]
     [ProducesResponseType(typeof(Resource<EncaminhamentoResponseDto>), StatusCodes.Status201Created)]
+    [SwaggerOperation(Summary = "Cria encaminhamento", Description = "Inclui um novo encaminhamento.")]
     public async Task<ActionResult<Resource<EncaminhamentoResponseDto>>> Create(
         [FromBody] EncaminhamentoRequestDto dto,
         CancellationToken cancellationToken = default)
@@ -162,6 +168,7 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
     [Consumes("application/json")]
     [ProducesResponseType(typeof(Resource<EncaminhamentoResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Atualiza encaminhamento", Description = "Atualiza um encaminhamento existente pelo ID.")]
     public async Task<ActionResult<Resource<EncaminhamentoResponseDto>>> Update(
         [FromRoute] int id,
         [FromBody] EncaminhamentoRequestDto dto,
@@ -180,6 +187,7 @@ public class EncaminhamentosController(IEncaminhamentoService service) : Control
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Remove encaminhamento", Description = "Exclui um encaminhamento pelo ID.")]
     public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken = default)
         => (await _service.DeleteAsync(id, cancellationToken)) ? NoContent() : NotFound();
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MindCareAi.Domain.DTOs.Requests;
 using MindCareAi.Domain.DTOs.Responses;
 using MindCareAi.Services.Interfaces;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MindCareAi.Controllers;
 
@@ -20,6 +21,7 @@ public class TriagensController(ITriagemService service) : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedResult<Resource<TriagemResponseDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Lista triagens", Description = "Retorna triagens paginadas com links HATEOAS.")]
     public async Task<ActionResult<PagedResult<Resource<TriagemResponseDto>>>> GetAll(
         [FromQuery] int page = 1,
         [FromQuery] int size = 10,
@@ -48,6 +50,7 @@ public class TriagensController(ITriagemService service) : ControllerBase
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(Resource<TriagemResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Busca triagem por ID", Description = "Recupera uma triagem específica.")]
     public async Task<ActionResult<Resource<TriagemResponseDto>>> GetById(
         [FromRoute] int id,
         CancellationToken cancellationToken = default)
@@ -65,6 +68,7 @@ public class TriagensController(ITriagemService service) : ControllerBase
     [HttpGet("usuarios/{usuarioId:int}")]
     [ProducesResponseType(typeof(PagedResult<Resource<TriagemResponseDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Lista por usuário", Description = "Retorna triagens de um usuário específico, paginadas.")]
     public async Task<ActionResult<PagedResult<Resource<TriagemResponseDto>>>> GetByUsuario(
         [FromRoute] int usuarioId,
         [FromQuery] int page = 1,
@@ -104,6 +108,7 @@ public class TriagensController(ITriagemService service) : ControllerBase
     [HttpPost]
     [Consumes("application/json")]
     [ProducesResponseType(typeof(Resource<TriagemResponseDto>), StatusCodes.Status201Created)]
+    [SwaggerOperation(Summary = "Cria triagem", Description = "Inclui uma nova triagem.")]
     public async Task<ActionResult<Resource<TriagemResponseDto>>> Create(
         [FromBody] TriagemRequestDto dto,
         CancellationToken cancellationToken = default)
@@ -120,6 +125,7 @@ public class TriagensController(ITriagemService service) : ControllerBase
     [Consumes("application/json")]
     [ProducesResponseType(typeof(Resource<TriagemResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Atualiza triagem", Description = "Atualiza uma triagem existente pelo ID.")]
     public async Task<ActionResult<Resource<TriagemResponseDto>>> Update(
         [FromRoute] int id,
         [FromBody] TriagemRequestDto dto,
@@ -138,6 +144,7 @@ public class TriagensController(ITriagemService service) : ControllerBase
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerOperation(Summary = "Remove triagem", Description = "Exclui uma triagem pelo ID.")]
     public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken = default)
         => (await _service.DeleteAsync(id, cancellationToken)) ? NoContent() : NotFound();
 }

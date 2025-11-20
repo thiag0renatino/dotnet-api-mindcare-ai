@@ -11,6 +11,7 @@
         <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9"/>
         <PackageReference Include="Oracle.EntityFrameworkCore" Version="7.21.10"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
