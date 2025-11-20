@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MindCareAi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2efd8fca34ba8b2bce31cd6eb7b23a2bc2956222")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+472ac58fcbeaf900d968a8e702fa1006796c1fdf")]
 [assembly: System.Reflection.AssemblyProductAttribute("MindCareAi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MindCareAi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
