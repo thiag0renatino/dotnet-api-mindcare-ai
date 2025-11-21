@@ -14,6 +14,9 @@ obj/
 *.user
 *.suo
 
+MindCareAi.Tests/bin/
+MindCareAi.Tests/obj/
+
 
 # App config local
 appsettings.Development.json
