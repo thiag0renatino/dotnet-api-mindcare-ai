@@ -62,22 +62,15 @@ Os RHs e as lideranças de empresas carecem de ferramentas para acompanhar o bem
 
 ---
 
-## Swagger / OpenAPI
-
-A solução expõe Swagger/OpenAPI somente em ambiente de desenvolvimento. Cada versão (`v1`, `v2`, …) gera um documento em `/openapi/{version}.json` e a UI fica disponível em `/swagger-ui`. Os endpoints trazem exemplos, schemas dos DTOs e anotações (`SwaggerOperation`), facilitando o handoff para outros times.
-
----
-
 ## Versionamento da API
 
 O projeto utiliza **API Versioning** com:
 
 - Segmento na rota (`/api/v{version}`) – padrão atual: `/api/v1/...`;
-- Header `x-api-version` e query string `?api-version=` como alternativas;
 - Swagger configurado para publicar um documento por versão;
 - Valores default `1.0` quando o cliente não envia a versão.
 
-Para consumir outra versão no futuro:
+Para consumir outra versão:
 
 ```http
 GET https://localhost:<porta>/api/v2/triagens
@@ -94,7 +87,7 @@ Header: x-api-version: 2.0
 
 ### Endpoint
 
-- `POST /api/v{version}/mindcheck-ai/analises` (use `v1` atualmente).
+- `POST /api/v{version}/mindcheck-ai/analises`.
 - Conteúdo `application/json`:
   ```json
   {
