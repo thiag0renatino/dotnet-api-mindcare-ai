@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MindCareAi.Infrastructure.Data;
 using MindCareAi.Services;
 using MindCareAi.Services.Interfaces;
+using MindCareAi.Services.MindCheckAi;
 
 namespace MindCareAi.Infrastructure.Extensions;
 
@@ -28,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IEmpresaService, EmpresaService>();
         services.AddScoped<IProfissionalService, ProfissionalService>();
+        services.AddScoped<IMindCheckAiService, MindCheckAiService>();
 
         return services;
     }

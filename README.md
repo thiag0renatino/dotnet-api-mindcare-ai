@@ -25,6 +25,7 @@ Os RHs e as lideranças de empresas carecem de ferramentas para acompanhar o bem
 - ASP.NET Core Health Checks (incluindo `MindCareContext`);
 - xUnit + WebApplicationFactory + EF Core InMemory para testes de integração;
 - Git/GitHub.
+- ML.NET 3.0 (classificação textual interna para o fluxo MindCheck AI).
 
 ---
 
@@ -85,6 +86,54 @@ ou
 ```http
 GET https://localhost:<porta>/api/triagens?api-version=2.0
 Header: x-api-version: 2.0
+```
+
+---
+
+## MindCheck AI End-to-End
+
+### Endpoint
+
+- `POST /api/v{version}/mindcheck-ai/analises` (use `v1` atualmente).
+- Conteúdo `application/json`:
+  ```json
+  {
+    "usuarioId": 1,
+    "relato": "Crise de ansiedade com insonia e ideacao suicida.",
+    "sintomas": ["insonia", "falta de apetite"],
+    "humor": "desesperanca",
+    "rotina": "isolamento social"
+  }
+  ```
+
+### Pipeline
+
+1. `MindCheckAiPromptBuilder` monta uma instrução fixa + contexto do usuário.
+2. `MindCheckAiModel` (ML.NET) classifica o risco (`Baixo|Moderado|Alto`) e define sugestões/encaminhamentos padrão.
+3. `MindCheckAiService` valida o payload, salva uma nova `Triagem` e cria um `Encaminhamento` quando o risco é **Moderado** ou **Alto**.
+4. O controller retorna `200 OK` com:
+   - `analise`: prompt, risco, sugestões, encaminhamentos recomendados, justificativa e confiança.
+   - `triagem`: registro persistido com usuário/empresa.
+   - `encaminhamento`: preenchido apenas quando o risco é moderado/alto.
+
+### Exemplos
+
+- **Risco Alto** → encaminhamento imediato:
+  ```json
+  {
+    "analise": { "risco": "Alto", "encaminhamentos": ["Avaliacao psiquiatrica emergencial"] },
+    "triagem": { "risco": "Alto" },
+    "encaminhamento": { "prioridade": "Alta" }
+  }
+  ```
+- **Risco Baixo** → apenas triagem (campo `encaminhamento` ausente ou `null`).
+
+### Como testar
+
+```bash
+dotnet test          # roda os testes de integração, incluindo MindCheck AI
+dotnet run --project MindCareAi/MindCareAi.csproj
+# depois faça um POST para /api/v1/mindcheck-ai/analises usando os exemplos acima
 ```
 
 ---
