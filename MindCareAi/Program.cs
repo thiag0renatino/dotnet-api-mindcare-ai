@@ -57,20 +57,17 @@ builder.Services.AddOpenTelemetry()
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger(options => { options.RouteTemplate = "openapi/{documentName}.json"; });
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger(options => { options.RouteTemplate = "openapi/{documentName}.json"; });
-    app.UseSwaggerUI(options =>
+    var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+    foreach (var description in provider.ApiVersionDescriptions)
     {
-        var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-        foreach (var description in provider.ApiVersionDescriptions)
-        {
-            options.SwaggerEndpoint($"/openapi/{description.GroupName}.json",
-                $"MindCare AI {description.GroupName.ToUpperInvariant()}");
-        }
-        options.RoutePrefix = "swagger-ui";
-    });
-}
+        options.SwaggerEndpoint($"/openapi/{description.GroupName}.json",
+            $"MindCare AI {description.GroupName.ToUpperInvariant()}");
+    }
+    options.RoutePrefix = "swagger-ui";
+});
 
 app.UseHttpsRedirection();
 app.UseHttpLogging();
